@@ -5,7 +5,7 @@ __declspec(dllexport) int replaceString(const wchar_t* toReplace, const wchar_t*
 	int replacementLength = ::lstrlen(toReplace);
 	if ((replacementLength == 0) || (replacementLength != ::lstrlen(newString)))
 	{
-		return -1;
+		return INVALID_RESULT;
 	}
 
 	HANDLE currentProcess = ::GetCurrentProcess();
@@ -14,7 +14,7 @@ __declspec(dllexport) int replaceString(const wchar_t* toReplace, const wchar_t*
 
 	DWORD pageSizeInWchars = systemInfo.dwPageSize / sizeof(wchar_t);
 
-	wchar_t *pageContent = (wchar_t *) ::calloc(pageSizeInWchars, sizeof(wchar_t));
+	wchar_t* pageContent = (wchar_t *) ::calloc(pageSizeInWchars, sizeof(wchar_t));
 
 	DWORD lastPageSymbol = pageSizeInWchars - (DWORD)replacementLength;
 
@@ -34,7 +34,7 @@ __declspec(dllexport) int replaceString(const wchar_t* toReplace, const wchar_t*
 			(pageInfo.Protect & PAGE_READWRITE))
 		{
 			if (::ReadProcessMemory(currentProcess, pageAddress, pageContent,
-				systemInfo.dwPageSize, nullptr))
+				systemInfo.dwPageSize, nullptr) != FALSE)
 			{
 				shouldWritePage = false;
 

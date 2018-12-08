@@ -3,7 +3,7 @@
 #endif // !UNICODE
 
 #define INVALID_RESULT -1
-#define INVALID_HANDLE 0
+#define INVALID_ID 0
 
 
 #include <windows.h>
@@ -11,9 +11,9 @@
 #include <vector>
 #include <tlhelp32.h>
 
-DWORD getProcessByName(const wchar_t* searchProc)
+DWORD getProcessByName(const wchar_t* processName)
 {
-	DWORD result = INVALID_HANDLE;
+	DWORD result = INVALID_ID;
 
 	HANDLE handle = ::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
@@ -23,7 +23,7 @@ DWORD getProcessByName(const wchar_t* searchProc)
 
 	do
 	{
-		if (::wcscmp(ProcEntry.szExeFile, searchProc) == 0) 
+		if (::wcscmp(ProcEntry.szExeFile, processName) == 0) 
 		{
 			result = ProcEntry.th32ProcessID;
 			break;
@@ -40,11 +40,11 @@ int wmain()
 	const wchar_t* dllName = L"InjectionDll.dll";
 	const wchar_t* exeToEnjectName = L"InjectionAndReplacementDemo.exe";
 
-	DWORD processId = INVALID_HANDLE;
+	DWORD processId = INVALID_ID;
 	int iterationsLeft = 10;
 	const DWORD timeout = 500;
 
-	while (processId == INVALID_HANDLE)
+	while (processId == INVALID_ID)
 	{
 		iterationsLeft--;
 		if (iterationsLeft == 0)
@@ -53,9 +53,9 @@ int wmain()
 			return INVALID_RESULT;
 		}
 
-		processId  = getProcessByName(exeToEnjectName);
+		processId = getProcessByName(exeToEnjectName);
 		
-		if (processId == INVALID_HANDLE)
+		if (processId == INVALID_ID)
 		{
 			::Sleep(timeout);
 		}
@@ -84,7 +84,7 @@ int wmain()
 		else
 		{
 			if (::WriteProcessMemory(injectedProcess, injectionLibConatiner,
-				dllName, (dllNameLength + 1) * sizeof(wchar_t), nullptr))
+				dllName, (dllNameLength + 1) * sizeof(wchar_t), nullptr) != FALSE)
 			{
 				if (::CreateRemoteThread(injectedProcess, nullptr, 0,
 					(LPTHREAD_START_ROUTINE)::LoadLibrary, 
