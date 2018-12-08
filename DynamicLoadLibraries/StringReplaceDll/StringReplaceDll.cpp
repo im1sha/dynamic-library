@@ -14,7 +14,7 @@ __declspec(dllexport) int replaceString(const wchar_t* toReplace, const wchar_t*
 
 	DWORD pageSizeInWchars = systemInfo.dwPageSize / sizeof(wchar_t);
 
-	wchar_t *pageContent = (wchar_t *)::calloc(pageSizeInWchars, sizeof(wchar_t));
+	wchar_t *pageContent = (wchar_t *) ::calloc(pageSizeInWchars, sizeof(wchar_t));
 
 	DWORD lastPageSymbol = pageSizeInWchars - (DWORD)replacementLength;
 
@@ -28,7 +28,7 @@ __declspec(dllexport) int replaceString(const wchar_t* toReplace, const wchar_t*
 		pageAddress = (LPVOID)((ULONG_PTR)pageAddress 
 			+ (ULONG_PTR)systemInfo.dwPageSize))
 	{
-		::VirtualQuery(pageAddress, &pageInfo, sizeof(MEMORY_BASIC_INFORMATION));
+		::VirtualQuery(pageAddress, &pageInfo, sizeof(pageInfo));
 
 		if ((pageInfo.State == MEM_COMMIT) &&
 			(pageInfo.Protect & PAGE_READWRITE))
@@ -71,7 +71,7 @@ __declspec(dllexport) int replaceString(const wchar_t* toReplace, const wchar_t*
 	return totalReplaced;
 }
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+BOOL APIENTRY DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	return TRUE;
 }

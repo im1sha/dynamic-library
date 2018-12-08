@@ -12,24 +12,27 @@ extern "C"
 
 int wmain()
 {
-	int x, y;
+	int x = 0;
+	int y = 0;
+
 	char* processName = getCurrentProcessName();
 
 	if (processName == nullptr)
 	{
-		::printf_s("Error getting current process name\n");
+		::printf("Error getting current process name\n");
 	}
 	else
 	{
-		::printf_s("Current process name: %s\n", processName);
+		::printf("Current process name: %s\n", processName);
 		delete[] processName;
 	}
 
-	::printf_s("Enter x: ");
+	::printf("Enter x: ");
 	::scanf_s("%d", &x);
-	::printf_s("Enter y: ");
+
+	::printf("Enter y: ");
 	::scanf_s("%d", &y);
 
-	::printf_s("Minimum of x and y: %d\nMaximum of x and y: %d\n", getMin(x, y), getMax(x, y));
+	::printf("Minimum of x and y: %d\nMaximum of x and y: %d\n", getMin(x, y), getMax(x, y));
 	::system("pause");
 }

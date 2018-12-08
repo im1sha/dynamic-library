@@ -1,9 +1,9 @@
-#include <Windows.h>
+#include <windows.h>
 #include "../StringReplaceDll/StringReplaceDll.h"
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+BOOL APIENTRY DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
-	if (ul_reason_for_call == DLL_PROCESS_ATTACH)
+	if (fdwReason == DLL_PROCESS_ATTACH)
 	{
 		replaceString(L"OLD STRING", L"-->NEW ONE");
 	}

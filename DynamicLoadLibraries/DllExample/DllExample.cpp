@@ -26,7 +26,7 @@ __declspec(dllexport) char* __stdcall getCurrentProcessName()
 	}
 }
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+BOOL APIENTRY DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	return TRUE;
 }
